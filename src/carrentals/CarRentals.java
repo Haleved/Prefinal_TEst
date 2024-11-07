@@ -200,16 +200,16 @@ public class CarRentals {
                 System.out.print("Status: ");
                 String status = sc.next();
 
-                String sql = "INSERT INTO StudentsG (s_fname, s_lname, s_email, s_status) VALUES (?, ?, ?, ?)";
+                String sql = "INSERT INTO customer (cst_fname, cst_lname, cst_email, cst_status) VALUES (?, ?, ?, ?)";
 
 
                 conf.addRecord(sql, fname, lname, email, status);
 
         }
              private void viewpeople() {
-        String qry = "SELECT * FROM StudentsG";
+        String qry = "SELECT * FROM customer";
         String[] hdrs = {"ID", "First Name", "Last Name", "Email", "Status"};
-        String[] clmns = {"s_id", "s_fname", "s_lname", "s_email", "s_status"};
+        String[] clmns = {"cst_id", "cst_fname", "cst_lname", "cst_email", "cst_status"};
 
         config conf = new config();
         conf.viewRecords(qry, hdrs, clmns);
@@ -229,7 +229,7 @@ public class CarRentals {
                  System.out.print("New Status: ");
                  String nstatus = sc.next();
                  
-                 String qry = "UPDATE StudentsG SET s_fname = ?, s_lname = ?, s_email = ?, s_status = ? WHERE s_id = ?";
+                 String qry = "UPDATE customer SET cst_fname = ?, cst_lname = ?, cst_email = ?, cst_status = ? WHERE cst_id = ?";
                  
                  config conf = new config();
                  conf.updateRecord(qry, nfname, nlname, nemail, nstatus, id);
@@ -240,7 +240,7 @@ public class CarRentals {
              System.out.println("Enter ID to delete: ");
              int id = sc.nextInt();
              
-             String qry = "DELETE FROM StudentsG WHERE s_id = ?";
+             String qry = "DELETE FROM customer WHERE cst_id = ?";
              
              config conf = new config();
              conf.deleteRecord(qry, id);
@@ -250,26 +250,28 @@ public class CarRentals {
                 Scanner sc = new Scanner(System.in);
                 config conf = new config();
                 System.out.print("Brand: ");
-                String fname = sc.next();
+                String brand = sc.next();
                 System.out.print("Model: ");
-                String lname = sc.next();
+                String model = sc.next();
                 System.out.print("Quantity: ");
-                String email = sc.next();
+                int qtty = sc.nextInt();
+                System.out.print("Price: ");
+                int price = sc.nextInt();
                 
 
-                //String sql = "INSERT INTO StudentsG (s_fname, s_lname, s_email, s_status) VALUES (?, ?, ?, ?)";
+                String sql = "INSERT INTO cars (car_brand, car_model, car_qtty, car_price) VALUES (?, ?, ?, ?)";
 
 
-                //conf.addRecord(sql, fname, lname, email, status);
+                conf.addRecord(sql, brand, model, qtty, price);
 
         }
              private void viewcar() {
-        //String qry = "SELECT * FROM StudentsG";
-        //String[] hdrs = {"ID", "First Name", "Last Name", "Email", "Status"};
-        //String[] clmns = {"s_id", "s_fname", "s_lname", "s_email", "s_status"};
+        String qry = "SELECT * FROM cars";
+        String[] hdrs = {"ID", "Brand", "Model", "Quantity", "Price"};
+        String[] clmns = {"car_id", "car_brand", "car_model", "car_qtty", "car_price"};
 
         config conf = new config();
-        //conf.viewRecords(qry, hdrs, clmns);
+        conf.viewRecords(qry, hdrs, clmns);
     }
 
              private void updatecar(){
@@ -278,14 +280,14 @@ public class CarRentals {
              int id = sc.nextInt();
              
                  System.out.print("New Quantity: ");
-                 String nfname = sc.next();
-                 System.out.print("New Status: ");
-                 String nstatus = sc.next();
+                 int nqtty = sc.nextInt();
+                 System.out.print("New Price: ");
+                 int nprice = sc.nextInt();
                  
-                 //String qry = "UPDATE StudentsG SET s_fname = ?, s_lname = ?, s_email = ?, s_status = ? WHERE s_id = ?";
+                 String qry = "UPDATE cars SET car_qtty = ?, car_price = ? WHERE car_id = ?";
                  
                  config conf = new config();
-                 //conf.updateRecord(qry, nfname,  nstatus, id);
+                 conf.updateRecord(qry, nqtty,  nprice, id);
              }
              
              private void deletecar(){
@@ -293,34 +295,38 @@ public class CarRentals {
              System.out.println("Enter ID to delete: ");
              int id = sc.nextInt();
              
-             //String qry = "DELETE FROM StudentsG WHERE s_id = ?";
+             String qry = "DELETE FROM cars WHERE car_id = ?";
              
              config conf = new config();
-            // conf.deleteRecord(qry, id);
+             conf.deleteRecord(qry, id);
              }
              
              public void addRental(){
                 Scanner sc = new Scanner(System.in);
                 config conf = new config();
-                System.out.print("First Name: ");
-                String fname = sc.next();
-                System.out.print("Last Name: ");
-                String lname = sc.next();
-                System.out.print("Email: ");
-                String email = sc.next();
-                System.out.print("Status: ");
+                System.out.print("Add Customer ID: ");
+                String cst_id = sc.next();
+                System.out.print("Add Car ID: ");
+                String car_id = sc.next();
+                System.out.print("Rental Date: ");
+                String rtldate = sc.next();
+                System.out.print("Return Date: ");
+                String rtrdate = sc.next();
+                System.out.println("Paid Amount: ");
+                int paidcash = sc.nextInt();
+                System.out.println("Status: ");
                 String status = sc.next();
 
-                String sql = "INSERT INTO StudentsG (s_fname, s_lname, s_email, s_status) VALUES (?, ?, ?, ?)";
+                String sql = "INSERT INTO rentals (cst_id, car_id, rnt_rentdate, rnt_ddate, rnt_pcash, rnt_status) VALUES (?, ?, ?, ?, ?, ?)";
 
 
-                conf.addRecord(sql, fname, lname, email, status);
+                conf.addRecord(sql, cst_id, car_id, rtldate, rtrdate, paidcash, status);
 
         }
              private void viewRental() {
-        String qry = "SELECT * FROM StudentsG";
-        String[] hdrs = {"ID", "First Name", "Last Name", "Email", "Status"};
-        String[] clmns = {"s_id", "s_fname", "s_lname", "s_email", "s_status"};
+        String qry = "SELECT * FROM rentals";
+        String[] hdrs = {"ID", "Customer ID", "Car ID", "Rental Date", "Return Date", "Paid Amount", "Status"};
+        String[] clmns = {"car_id", "cst_id", "car_id", "rnt_rentdate", "rnt_ddate", "rnt_pcash", "rnt_status"};
 
         config conf = new config();
         conf.viewRecords(qry, hdrs, clmns);
@@ -331,19 +337,17 @@ public class CarRentals {
              System.out.print("Enter ID to update: ");
              int id = sc.nextInt();
              
-                 System.out.print("New First Name: ");
-                 String nfname = sc.next();
-                 System.out.print("New Last Name: ");
-                 String nlname = sc.next();
-                 System.out.print("New Email: ");
-                 String nemail = sc.next();
+                 System.out.print("New Return Date: ");
+                 String nrtrdate = sc.next();
+                 System.out.print("New Paid Amount: ");
+                 String npcash = sc.next();
                  System.out.print("New Status: ");
                  String nstatus = sc.next();
                  
-                 String qry = "UPDATE StudentsG SET s_fname = ?, s_lname = ?, s_email = ?, s_status = ? WHERE s_id = ?";
+                 String qry = "UPDATE rentals SET rnt_duedate = ?, rnt_pcash = ?, rnt_status = ? WHERE rnt_id = ?";
                  
                  config conf = new config();
-                 conf.updateRecord(qry, nfname, nlname, nemail, nstatus, id);
+                 conf.updateRecord(qry, nrtrdate, npcash, nstatus, id);
              }
              
              private void deleteRental(){
@@ -351,7 +355,7 @@ public class CarRentals {
              System.out.println("Enter ID to delete: ");
              int id = sc.nextInt();
              
-             String qry = "DELETE FROM StudentsG WHERE s_id = ?";
+             String qry = "DELETE FROM rentals WHERE rnt_id = ?";
              
              config conf = new config();
              conf.deleteRecord(qry, id);

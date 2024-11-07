@@ -13,7 +13,7 @@ public static Connection connectDB() {
         Connection con = null;
         try {
             Class.forName("org.sqlite.JDBC"); // Load the SQLite JDBC driver
-            con = DriverManager.getConnection("jdbc:sqlite:testapp.db"); // Establish connection
+            con = DriverManager.getConnection("jdbc:sqlite:carrent.db"); // Establish connection
             System.out.println("Connection Successful");
         } catch (Exception e) {
             System.out.println("Connection Failed: " + e);
