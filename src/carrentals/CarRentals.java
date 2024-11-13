@@ -1,6 +1,7 @@
 package carrentals;
 
 import java.util.Scanner;
+import java.time.LocalDate;
 
 
 public class CarRentals {
@@ -9,6 +10,7 @@ public class CarRentals {
     public static void main(String[] args) {
         CarRentals rentals = new CarRentals();
         rentals.mainMenu();
+        LocalDate currentDate = LocalDate.now();
     }
         
         public void mainMenu() {
@@ -16,11 +18,11 @@ public class CarRentals {
         boolean exit = false;
         
         while (!exit) {
-            System.out.println("==== Main Menu ====");
+            System.out.println("        ==== Main Menu ====");
             System.out.println("1. Customer Operations");
             System.out.println("2. Car Operations");
             System.out.println("3. Rental Operations");
-            System.out.println("4. View");
+            System.out.println("4. View Report");
             System.out.println("5. Exit");
             System.out.print("Select an option: ");
             int action = sc.nextInt();
@@ -36,7 +38,7 @@ public class CarRentals {
                     rentalMenu();
                     break;
                 case 4:
-                    viewMenu ();
+                    reportmenu ();
                     break;
                 case 5:
                     System.out.println("Exiting...");
@@ -55,11 +57,12 @@ public class CarRentals {
         boolean back = false;
 
         while (!back) {
-            System.out.println("==== Customer Menu ====");
+            System.out.println("        ==== Customer Menu ====");
             System.out.println("1. Add Customer");
             System.out.println("2. Update Customer");
             System.out.println("3. Delete Customer");
-            System.out.println("4. Back to Main Menu");
+            System.out.println("4. View Customer");
+            System.out.println("5. Back to Main Menu");
             System.out.print("Select an option: ");
             int choice = sc.nextInt();
 
@@ -78,6 +81,9 @@ public class CarRentals {
                     viewpeople();
                     break;
                 case 4:
+                    viewpeople();
+                    break;
+                case 5:
                     back = true;
                     break;
                 default:
@@ -92,11 +98,12 @@ public class CarRentals {
         boolean back = false;
 
         while (!back) {
-            System.out.println("==== Car Menu ====");
+            System.out.println("        ==== Car Menu ====");
             System.out.println("1. Add Car");
             System.out.println("2. Update Car");
             System.out.println("3. Delete Car");
-            System.out.println("4. Back to Main Menu");
+            System.out.println("4. View Car");
+            System.out.println("5. Back to Main Menu");
             System.out.print("Select an option: ");
             int choice = sc.nextInt();
 
@@ -115,6 +122,9 @@ public class CarRentals {
                     viewcar();
                     break;
                 case 4:
+                    viewcar();
+                    break;
+                case 5:
                     back = true;
                     break;
                 default:
@@ -125,30 +135,26 @@ public class CarRentals {
     }
 
 
-    public void viewMenu() {
+    public void reportmenu() {
         Scanner sc = new Scanner(System.in);
         boolean back = false;
 
         while (!back) {
-            System.out.println("==== View Menu ====");
-            System.out.println("1. View Customers");
-            System.out.println("2. View Cars");
-            System.out.println("3. View Rentals");
-            System.out.println("4. Back to Main Menu");
+            System.out.println("        ==== View Report ====");
+            System.out.println("1. View General Report");
+            System.out.println("2. View Specific Report");         
+            System.out.println("3. Back to Main Menu");
             System.out.print("Select an option: ");
             int choice = sc.nextInt();
 
             switch (choice) {
                 case 1:
-                    viewpeople();
+                    viewgreport();
                     break;
-                case 2:
-                    viewcar();
+                case 2 :
+                    viewsreport();
                     break;
-                case 3:    
-                    viewRental();
-                    break;
-                case 4:
+                case 3 :
                     back = true;
                     break;
                 default:
@@ -160,12 +166,15 @@ public class CarRentals {
     private void rentalMenu() {
         Scanner sc = new Scanner(System.in);
         int choice;
-        do {
-            System.out.println("==== Rental Menu ====");
+        boolean back = false;
+        
+        while (!back) {
+            System.out.println("        ==== Rental Menu ====");
             System.out.println("1. Add Rental");
             System.out.println("2. Update Rental");
             System.out.println("3. Delete Rental");
-            System.out.println("4. Back to Main Menu");
+            System.out.println("4. View Rental");
+            System.out.println("5. Back to Main Menu");
             System.out.print("Select Action: ");
             choice = sc.nextInt();
 
@@ -174,18 +183,25 @@ public class CarRentals {
                     addRental();
                     break;
                 case 2:
+                    viewRental();
                     updateRental();
+                    viewRental();
                     break;
                 case 3:
+                    viewRental();
                     deleteRental();
+                    viewRental();
                     break;
                 case 4:
-                    System.out.println("Returning to Main Menu...");
+                    viewRental();
+                    break;
+                case 5:
+                    back = true;
                     break;
                 default:
                     System.out.println("Invalid option. Please choose between 1 and 5.");
             }
-        } while (choice != 4);
+        } 
     }
     
              public void addpeople(){
@@ -258,21 +274,21 @@ public class CarRentals {
                 System.out.print("Price: ");
                 int price = sc.nextInt();
                 
-
                 String sql = "INSERT INTO cars (car_brand, car_model, car_qtty, car_price) VALUES (?, ?, ?, ?)";
-
-
                 conf.addRecord(sql, brand, model, qtty, price);
 
         }
              private void viewcar() {
-        String qry = "SELECT * FROM cars";
-        String[] hdrs = {"ID", "Brand", "Model", "Quantity", "Price"};
-        String[] clmns = {"car_id", "car_brand", "car_model", "car_qtty", "car_price"};
+    String qry = "SELECT car_id, car_brand, car_model, " +
+                 "CASE WHEN car_qtty = 0 THEN 'Unavailable' ELSE 'Available' END AS Availability, " +
+                 "car_price FROM cars";
+    
+    String[] hdrs = {"ID", "Brand", "Model", "Availability", "Price"};
+    String[] clmns = {"car_id", "car_brand", "car_model", "Availability", "car_price"};
 
-        config conf = new config();
-        conf.viewRecords(qry, hdrs, clmns);
-    }
+    config conf = new config();
+    conf.viewRecords(qry, hdrs, clmns);
+}
 
              private void updatecar(){
              Scanner sc = new Scanner(System.in);
@@ -301,36 +317,54 @@ public class CarRentals {
              conf.deleteRecord(qry, id);
              }
              
-             public void addRental(){
-                Scanner sc = new Scanner(System.in);
-                config conf = new config();
-                System.out.print("Add Customer ID: ");
-                String cst_id = sc.next();
-                System.out.print("Add Car ID: ");
-                String car_id = sc.next();
-                System.out.print("Rental Date: ");
-                String rtldate = sc.next();
-                System.out.print("Return Date: ");
-                String rtrdate = sc.next();
-                System.out.println("Paid Amount: ");
-                int paidcash = sc.nextInt();
-                System.out.println("Status: ");
-                String status = sc.next();
+            private void addRental() {
+    config conf = new config();
+    Scanner sc = new Scanner(System.in); 
 
-                String sql = "INSERT INTO rentals (cst_id, car_id, rnt_rentdate, rnt_ddate, rnt_pcash, rnt_status) VALUES (?, ?, ?, ?, ?, ?)";
+    String customerQuery = "SELECT cst_id AS ID, cst_fname AS 'First Name', cst_lname AS 'Last Name', cst_email AS 'Email', cst_status AS 'Status' FROM customer";
+    String[] customerHeaders = {"ID", "First Name", "Last Name", "Email", "Status"};
+    String[] customerColumns = {"ID", "First Name", "Last Name", "Email", "Status"};
+    conf.viewRecords(customerQuery, customerHeaders, customerColumns);
 
+    String carQuery = "SELECT car_id AS ID, car_brand AS Brand, car_model AS Model, car_qtty AS Availability, car_price AS Price FROM cars";
+    String[] carHeaders = {"ID", "Brand", "Model", "Availability", "Price"};
+    String[] carColumns = {"ID", "Brand", "Model", "Availability", "Price"};
+    conf.viewRecords(carQuery, carHeaders, carColumns);
 
-                conf.addRecord(sql, cst_id, car_id, rtldate, rtrdate, paidcash, status);
+    System.out.println("==== Add Rental ====");
+    System.out.print("Add Customer ID: ");
+    int customerId = sc.nextInt();
+    System.out.print("Add Car ID: ");
+    int carId = sc.nextInt();
+    System.out.print("Rental Date (YYYY-MM-DD): ");
+    String rentalDate = sc.next();
+    System.out.print("Return Date (YYYY-MM-DD): ");
+    String returnDate = sc.next();
+    System.out.print("Paid Amount: ");
+    double paidAmount = sc.nextDouble();
+    System.out.print("Status: ");
+    String status = sc.next();
 
-        }
+    String addRentalQuery = "INSERT INTO rentals (cst_id, car_id, rnt_date, rnt_rdate, rnt_pcash, rnt_status) " +
+                            "VALUES (?, ?, ?, ?, ?, ?)";
+
+}
+             
+             
              private void viewRental() {
-        String qry = "SELECT * FROM rentals";
-        String[] hdrs = {"ID", "Customer ID", "Car ID", "Rental Date", "Return Date", "Paid Amount", "Status"};
-        String[] clmns = {"car_id", "cst_id", "car_id", "rnt_rentdate", "rnt_ddate", "rnt_pcash", "rnt_status"};
+            String qry = "SELECT r.rnt_id, r.cst_id, r.car_id, r.rnt_rentdate, r.rnt_ddate, r.rnt_pcash, r.rnt_status, " +
+                         "(c.car_price - r.rnt_pcash) AS rnt_dues, " + 
+                         "(julianday(r.rnt_ddate) - julianday(r.rnt_rentdate)) AS rented_days " + 
+                         "FROM rentals r " +
+                         "JOIN cars c ON r.car_id = c.car_id"; 
 
-        config conf = new config();
-        conf.viewRecords(qry, hdrs, clmns);
-    }
+            String[] hdrs = {"ID", "Customer ID", "Car ID", "Rental Date", "Return Date", "Paid Amount", "Status", "Due Amount", "Rented Days"};
+
+            String[] clmns = {"rnt_id", "cst_id", "car_id", "rnt_rentdate", "rnt_ddate", "rnt_pcash", "rnt_status", "rnt_dues", "rented_days"};
+
+            config conf = new config();
+            conf.viewRecords(qry, hdrs, clmns);
+        }
 
              private void updateRental(){
              Scanner sc = new Scanner(System.in);
@@ -340,7 +374,7 @@ public class CarRentals {
                  System.out.print("New Return Date: ");
                  String nrtrdate = sc.next();
                  System.out.print("New Paid Amount: ");
-                 String npcash = sc.next();
+                 int npcash = sc.nextInt();
                  System.out.print("New Status: ");
                  String nstatus = sc.next();
                  
@@ -359,6 +393,63 @@ public class CarRentals {
              
              config conf = new config();
              conf.deleteRecord(qry, id);
+             }
+             private void viewgreport() {
+            config conf = new config(); 
+            System.out.println("       ==== General Reports ====");
+
+            String totalCarsRentedQuery = "SELECT COUNT(*) AS total_rentals FROM rentals";
+            String[] headers1 = {"Total Rentals"};
+            String[] columns1 = {"total_rentals"};
+            conf.viewRecords(totalCarsRentedQuery, headers1, columns1);
+
+            String totalRevenueQuery = "SELECT SUM(rnt_pcash) AS total_revenue FROM rentals";
+            String[] headers2 = {"Total Revenue"};
+            String[] columns2 = {"total_revenue"};
+            conf.viewRecords(totalRevenueQuery, headers2, columns2);
+
+            String mostRentedCarQuery = 
+                "SELECT car_model, COUNT(r.car_id) AS times_rented " +
+                "FROM rentals r " +
+                "JOIN cars c ON r.car_id = c.car_id " +
+                "GROUP BY car_model " +
+                "ORDER BY times_rented DESC " +
+                "LIMIT 1";
+            String[] headers3 = {"Most Rented Car", "Times Rented"};
+            String[] columns3 = {"car_model", "times_rented"};
+            conf.viewRecords(mostRentedCarQuery, headers3, columns3);
+        }
+             private void viewsreport(){
+                String curDate = LocalDate.now().toString(); 
+                config conf = new config(); 
+                Scanner sc = new Scanner(System.in);
+                System.out.println("==== Specific Reports ====");
+                System.out.println("1. View All Active Rentals");
+                System.out.println("2. View Overdue Rentals");
+                System.out.println("3. View Customer Rental History");
+                System.out.print("Select an option: ");
+                int specificChoice = sc.nextInt();
+                switch (specificChoice) {
+                    case 1:
+                        String activeRentalsQuery = "SELECT * FROM rentals WHERE rnt_status = 'active'";
+                        String[] activeHeaders = {"ID", "Customer ID", "Car ID", "Rental Date", "Return Date", "Paid Amount", "Status"};
+                        conf.viewRecords(activeRentalsQuery, activeHeaders, activeHeaders);
+                        break;
+                    case 2:
+                        String overdueQuery = "SELECT * FROM rentals WHERE rnt_ddate < DATE('now') AND rnt_status = 'active'";
+                        String[] overdueHeaders = {"ID", "Customer ID", "Car ID", "Rental Date", "Due Date", "Paid Amount", "Status"};
+                        conf.viewRecords(overdueQuery, overdueHeaders, overdueHeaders);
+                        break;
+                    case 3:
+                        System.out.print("Enter Customer ID: ");
+                        int custId = sc.nextInt();
+                        String historyQuery = "SELECT * FROM rentals WHERE cst_id = " + custId;
+                        String[] historyHeaders = {"ID", "Car ID", "Rental Date", "Return Date", "Paid Amount", "Status"};
+                        conf.viewRecords(historyQuery, historyHeaders, historyHeaders);
+                        break;
+                    default:
+                        System.out.println("Invalid option. Please try again.");
+                }
              }
              
     }
